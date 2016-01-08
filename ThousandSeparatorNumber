@@ -1,7 +1,7 @@
 /**
  * An override over ExtJS 6.0 Number class. Adds thousand separator feature controlled by setting the {@link #allowThousandSeparator} boolean property.
  */
-Ext.define("kastor.core.view.component.ThousandSeparatorNumber", {
+Ext.define("some.package.ThousandSeparatorNumber", {
     override: "Ext.form.field.Number",
 
     /**
