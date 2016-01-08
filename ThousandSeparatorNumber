@@ -1,14 +1,14 @@
 /**
- * An override over ExtJS 6.0 Number class. Adds thousand separator feature controlled by setting the {@link #useThousandSeparator} boolean property.
+ * An override over ExtJS 6.0 Number class. Adds thousand separator feature controlled by setting the {@link #allowThousandSeparator} boolean property.
  */
 Ext.define("kastor.core.view.component.ThousandSeparatorNumber", {
     override: "Ext.form.field.Number",
 
     /**
-     * @cfg {Boolean} useThousandSeparator
+     * @cfg {Boolean} allowThousandSeparator
      * False to disallow thousand separator feature.
      */
-    useThousandSeparator: true,
+    allowThousandSeparator: true,
 
     /**
      * @private
@@ -28,7 +28,7 @@ Ext.define("kastor.core.view.component.ThousandSeparatorNumber", {
     },
 
     getErrors: function (value) {
-        if (!this.useThousandSeparator || arguments.length == 0) {
+        if (!this.allowThousandSeparator || arguments.length == 0) {
             return this.callParent(arguments);
         } else {
             return this.callParent([this.toBaseNumber(value)]);
@@ -36,7 +36,7 @@ Ext.define("kastor.core.view.component.ThousandSeparatorNumber", {
     },
 
     rawToValue: function (rawValue) {
-        if (!this.useThousandSeparator)
+        if (!this.allowThousandSeparator)
             return this.callParent(arguments);
         var value = this.fixPrecision(this.parseRawValue(rawValue));
         if (value === null) {
@@ -46,7 +46,7 @@ Ext.define("kastor.core.view.component.ThousandSeparatorNumber", {
     },
 
     valueToRaw: function (value) {
-        if (!this.useThousandSeparator) {
+        if (!this.allowThousandSeparator) {
             return this.callParent(arguments);
         }
         var me = this,
@@ -68,7 +68,7 @@ Ext.define("kastor.core.view.component.ThousandSeparatorNumber", {
     },
 
     getSubmitValue: function () {
-        if (!this.useThousandSeparator)
+        if (!this.allowThousandSeparator)
             return this.callParent();
         var me = this,
             value = me.callParent();
@@ -80,7 +80,7 @@ Ext.define("kastor.core.view.component.ThousandSeparatorNumber", {
     },
 
     setMinValue: function (value) {
-        if (!this.useThousandSeparator)
+        if (!this.allowThousandSeparator)
             return this.callParent(arguments);
         var me = this,
             ariaDom = me.ariaEl.dom,
