@@ -27,12 +27,40 @@ Ext.define("some.package.ThousandSeparatorNumber", {
         return isNaN(value) ? null : value;
     },
 
-    getErrors: function (value) {
-        if (!this.allowThousandSeparator || arguments.length == 0) {
+    getErrors: function(value) {
+        if (!this.allowThousandSeparator)
             return this.callParent(arguments);
-        } else {
-            return this.callParent([this.toBaseNumber(value)]);
+        value = arguments.length > 0 ? value : this.processRawValue(this.getRawValue());
+
+        var me = this,
+            errors = me.callSuper([value]),
+            format = Ext.String.format,
+            num;
+
+        if (value.length < 1) { // if it's blank and textfield didn't flag it then it's valid
+            return errors;
         }
+
+        value = me.toBaseNumber(value);
+
+        if(isNaN(value)){
+            errors.push(format(me.nanText, value));
+        }
+
+        num = me.parseValue(value);
+
+        if (me.minValue === 0 && num < 0) {
+            errors.push(this.negativeText);
+        }
+        else if (num < me.minValue) {
+            errors.push(format(me.minText, me.minValue));
+        }
+
+        if (num > me.maxValue) {
+            errors.push(format(me.maxText, me.maxValue));
+        }
+
+        return errors;
     },
 
     rawToValue: function (rawValue) {
@@ -71,7 +99,7 @@ Ext.define("some.package.ThousandSeparatorNumber", {
         if (!this.allowThousandSeparator)
             return this.callParent();
         var me = this,
-            value = me.callParent();
+            value = me.callSuper();
 
         if (!me.submitLocaleSeparator) {
             value = me.toBaseNumber(value);
